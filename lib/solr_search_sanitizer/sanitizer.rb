@@ -103,7 +103,10 @@ module SolrSearchSanitizer
     # for this reason we simply remove the : from the search entirely since it cannot be escaped
     def escape_misc(query)
       return nil unless query
-      new_query = query.gsub(MISC_REGEXP, '"' => '\\"', ':' => '')
+      substitutions_hash = {'"' => '\\"', ':' => ''}
+      new_query = query.gsub(MISC_REGEXP) do |match| 
+        substitutions_hash[match]
+      end
     end
     
     def remove_misc(query)
