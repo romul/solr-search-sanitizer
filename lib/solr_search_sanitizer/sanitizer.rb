@@ -33,7 +33,10 @@ module SolrSearchSanitizer
     
     def escape_boolean_operators(query)
       return nil unless query
-      new_query = query.gsub(BOOLEAN_OPERATORS_REGEXP, '&&' => '\\&\\&', '||' => '\\|\\|', '!' => '\\!', 'AND' => 'and', 'NOT' => 'not', 'OR' => 'or')
+      substitutions_hash = {'&&' => '\\&\\&', '||' => '\\|\\|', '!' => '\\!', 'AND' => 'and', 'NOT' => 'not', 'OR' => 'or'}
+      new_query = query.gsub(BOOLEAN_OPERATORS_REGEXP) do |match| 
+        substitutions_hash[match]
+      end
     end
     
     def remove_boolean_operators(query)
